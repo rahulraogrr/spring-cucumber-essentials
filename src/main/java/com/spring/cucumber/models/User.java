@@ -1,5 +1,6 @@
 package com.spring.cucumber.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,8 +33,8 @@ public class User {
 	@JsonIgnore
 	private long id;
 
-	@Size(min = 6, max = 12, message = "Username must be a minimum of 6 and maximum of 12 Characters")
-	@NotNull(message = "Username Should Not Be Null!!!")
+	@Size(min = 6, max = 12, message = "username must be a minimum of 6 and maximum of 12 Characters")
+	@NotNull(message = "username Should Not Be null")
 	@Schema(
 			title = "username",
 			description = "Username of the user",
@@ -45,9 +46,8 @@ public class User {
 	@Column(name = "username", nullable = false, unique = true, length = 12)
 	private String username; 
 	
-	@Size(message = "Password Should be Minimum of 8 and Maximum of 20 Characters", min = 8, max = 20)
-	@NotBlank(message = "Password Should Not Be Blank")
-	@NotNull(message = "Password Should Not be Null")
+	@Size(message = "password Should be Minimum of 8 and Maximum of 20 Characters", min = 8, max = 20)
+	@NotNull(message = "password Should Not be null")
 	@Schema(
 			title = "password",
 			description = "Password of the user which will be hashed and stored in database",
@@ -68,8 +68,8 @@ public class User {
 	@Column(name = "salt", length = 64)
 	private String salt;
 	
-	@NotBlank(message = "Firstname is Blank!!!")
-	@NotNull(message = "Firstname is mandatory!!!")
+	@NotBlank(message = "firstName is blank")
+	@NotNull(message = "firstName is null")
 	@Schema(
 			title = "firstName",
 			description = "First Name of the user",
@@ -90,8 +90,8 @@ public class User {
 	@Column(name = "middle_name", length = 32)
 	private String middleName;
 
-	@NotBlank(message = "Lastname is Blank")
-	@NotNull(message = "Lastname is null")
+	@NotBlank(message = "lastName is blank")
+	@NotNull(message = "lastName is null")
 	@Schema(
 			title = "lastName",
 			description = "Last Name of the user",
@@ -110,11 +110,10 @@ public class User {
 			required = true,
 			maxLength = 64
 	)
+	@NotNull(message = "email is null")
 	@Column(name = "email", nullable = false, unique = true, length = 64)
 	private String email;
 
-	
-	@NotBlank(message = "Mobile number should not be blank")
 	@Size(message = "Mobile number should be minimum of 10 and maximum of 10 digits", min = 10, max = 10)
 	@NotNull(message = "Mobile is mandatory!!!")
 	@Schema(
@@ -133,7 +132,8 @@ public class User {
 			description = "Date Of Birth",
 			required = true
 	)
-	@Temporal(TemporalType.DATE)
+	@NotNull(message = "dateOfBirth is null")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date dateOfBirth;
 
 	@Valid
