@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @NoArgsConstructor
-@Entity @Data
+@Entity @Getter
+@Setter
+@Builder
 @Table(name = "addresses")
 @AllArgsConstructor
 @JsonPropertyOrder({"addressType","addressLine1","addressLine2","city","state","postalCode","country"})

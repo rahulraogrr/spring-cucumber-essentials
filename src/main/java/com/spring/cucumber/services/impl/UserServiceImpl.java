@@ -33,8 +33,25 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User modifyUser(User user, String username) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Modify User {}",username);
+
+	    User modifyUser = userRepository.findByUsername(username)
+				.orElseThrow(() -> new NotFoundException(User.class,username));
+
+		modifyUser.setUsername(user.getUsername());
+		modifyUser.setPassword(user.getPassword());
+		modifyUser.setFirstName(user.getFirstName());
+		modifyUser.setMiddleName(user.getMiddleName());
+		modifyUser.setLastName(user.getLastName());
+		modifyUser.setDateOfBirth(user.getDateOfBirth());
+		modifyUser.setEmail(user.getEmail());
+		modifyUser.setMobile(user.getMobile());
+
+		//Will handle a collection with cascade= all-delete-orphan was no longer referenced by the owning entity instance
+		modifyUser.getAddress().clear();
+		modifyUser.getAddress().addAll(user.getAddress());
+
+		return userRepository.save(modifyUser);
 	}
 
 	@Override

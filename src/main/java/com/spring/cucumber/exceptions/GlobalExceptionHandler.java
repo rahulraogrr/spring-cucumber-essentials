@@ -28,33 +28,33 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleInternalServerError(Exception e){
 		log.error("UNHANDLED EXCEPTION: ",e);
 
-		return new ResponseEntity<>(new ApiErrorResponse(
-				HttpStatus.INTERNAL_SERVER_ERROR.value(),
-				LocalDateTime.now(),
-				List.of(new InternalServerError("Internal Server Error. We have logged the error and we will work hard to make it right"))
-		), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(ApiErrorResponse.builder()
+				.timestamp(LocalDateTime.now())
+				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+				.message(List.of(InternalServerError.builder().defaultMsg("Internal Server Error. We have logged the error and we will work hard to make it right").build()))
+				.build(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(value = { HttpMessageNotReadableException.class })
 	public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletRequest request){
-		log.error("HttpMessageNotReadableException");
+		log.error("HttpMessageNotReadableException : {}",e.getMessage());
 
-		return new ResponseEntity<>(new ApiErrorResponse(
-				HttpStatus.BAD_REQUEST.value(),
-				LocalDateTime.now(),
-				List.of(new BadRequestError(null,null,null,"Required request body is missing"))
-		), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(ApiErrorResponse.builder()
+				.status(HttpStatus.BAD_REQUEST.value())
+				.timestamp(LocalDateTime.now())
+				.message(List.of(BadRequestError.builder().defaultMsg("Required request body is missing").build()))
+				.build(), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(value = { NotFoundException.class })
 	public ResponseEntity<ApiErrorResponse> handleNotFoundException(NotFoundException e, HttpServletRequest request){
 		log.error("Not Found Exception : ");
-		ApiErrorResponse response = new ApiErrorResponse(
-				HttpStatus.NOT_FOUND.value(),
-				LocalDateTime.now(),
-				List.of(new NotFoundError(request.getRequestURI(), e.getMessage()))
-		);
-		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+
+		return new ResponseEntity<>(ApiErrorResponse.builder()
+				.status(HttpStatus.NOT_FOUND.value())
+				.timestamp(LocalDateTime.now())
+				.message(List.of(NotFoundError.builder().path(request.getRequestURI()).defaultMsg(e.getMessage()).build()))
+				.build(), HttpStatus.NOT_FOUND);
 	}
 
 	/**
@@ -68,22 +68,12 @@ public class GlobalExceptionHandler {
 		List<SubError> badRequestErrors = new ArrayList<>();
 
 		if (e.getFieldErrors().size()>0){
-			e.getFieldErrors().forEach(fieldError -> {
-				BadRequestError error = new BadRequestError();
-				error.setObject(fieldError.getObjectName());
-				error.setField(fieldError.getField());
-				error.setRejectedValue(fieldError.getRejectedValue());
-				error.setDefaultMsg(fieldError.getDefaultMessage());
-				badRequestErrors.add(error);
-			});
+			e.getFieldErrors().forEach(fieldError -> badRequestErrors.add(BadRequestError.builder().object(fieldError.getObjectName()).field(fieldError.getField()).rejectedValue(fieldError.getRejectedValue()).defaultMsg(fieldError.getDefaultMessage()).build()));
 		}
 
-		ApiErrorResponse response = new ApiErrorResponse(
-				HttpStatus.BAD_REQUEST.value(),
-				LocalDateTime.now(),
-				badRequestErrors
-		);
-
-		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(ApiErrorResponse.builder()
+				.timestamp(LocalDateTime.now())
+				.status(HttpStatus.BAD_REQUEST.value())
+				.message(badRequestErrors).build(), HttpStatus.BAD_REQUEST);
 	}
 }

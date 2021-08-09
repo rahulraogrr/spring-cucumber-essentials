@@ -18,7 +18,7 @@ import java.util.*;
 @AllArgsConstructor
 @JsonPropertyOrder({"username","password","firstName","middleName","lastName","dateOfBirth","email",
 	"mobile","address"})
-@Getter
+@Getter @Builder
 @Setter @ToString
 public class User {
 	

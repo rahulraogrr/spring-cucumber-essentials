@@ -12,9 +12,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.spring.cucumber.exceptions.ClassNameResolver;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @AllArgsConstructor
 @JsonPropertyOrder({"timestamp","status","message"})
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT,
