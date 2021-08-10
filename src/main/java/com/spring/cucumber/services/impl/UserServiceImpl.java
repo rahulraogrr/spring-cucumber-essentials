@@ -1,6 +1,7 @@
 package com.spring.cucumber.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.spring.cucumber.exceptions.custom.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,13 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public List<User> getAllUsers() {
-		log.info("Get All Users"); 
-		return userRepository.findAll();
+	public List<User> getAllUsers() throws NotFoundException{
+		log.info("Get All Users");
+
+		if(userRepository.findAll().isEmpty())
+			throw new NotFoundException();
+
+		return userRepository.findAll().stream().sorted().collect(Collectors.toList());
 	}
 
 	@Override
@@ -32,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User modifyUser(User user, String username) {
+	public User modifyUser(User user, String username) throws NotFoundException {
 		log.info("Modify User {}",username);
 
 	    User modifyUser = userRepository.findByUsername(username)

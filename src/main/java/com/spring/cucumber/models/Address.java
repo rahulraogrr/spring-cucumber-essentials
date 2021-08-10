@@ -10,8 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @NoArgsConstructor
-@Entity @Getter
-@Setter
+@Entity
+@Getter @Setter
 @Builder
 @Table(name = "addresses")
 @AllArgsConstructor
@@ -28,19 +28,19 @@ public class Address {
 	@JsonIgnore
 	private long id;
 
-	@NotNull(message = "Address type is mandatory!!!")
-	@Enumerated
 	@Schema(
 			title = "AddressType",
 			description = "Address Type",
 			required = true,
 			implementation = AddressType.class
 	)
+	@NotNull(message = "Address type is null")
+	@Enumerated
 	@Column(name = "address_type", nullable = false, length = 10)
 	private AddressType addressType;
 
-	@NotBlank(message = "Address Line 1 is mandatory!!!")
-	@NotNull(message = "Address Line 1 is mandatory!!!")
+	@NotBlank(message = "Address Line 1 is blank")
+	@NotNull(message = "Address Line 1 is null")
 	@Schema(
 			title = "addressLine1",
 			description = "addressLine1 of the user",

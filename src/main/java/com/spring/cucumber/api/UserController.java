@@ -41,10 +41,6 @@ public class UserController {
 	})
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> getAllUsers() throws NotFoundException{
-		
-		if(null!=userService.getAllUsers() && userService.getAllUsers().isEmpty())
-			throw new NotFoundException();
-
 	  return ResponseEntity.ok(userService.getAllUsers());
 	}
 
@@ -71,7 +67,7 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "Resource Not Found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
 	})
-	@DeleteMapping(value = "/users/{username}")
+	@DeleteMapping(value = "/{username}")
 	public ResponseEntity<?> deleteUser(@Valid
 										@Size(min = 8, max = 12,
 												message = "Username must be a minimum of 6 and maximum of 12 Characters")
@@ -104,7 +100,7 @@ public class UserController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
 	})
 	@PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> modifyUser(@PathVariable String username, @RequestBody User user) throws NotFoundException {
+	public ResponseEntity<User> modifyUser(@PathVariable String username, @Valid @RequestBody User user) throws NotFoundException {
 		return ResponseEntity.ok(userService.modifyUser(user,username));
 	}
 }
