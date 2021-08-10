@@ -1,39 +1,23 @@
 package com.spring.cucumber.exceptions.models;
 
-import java.time.LocalDateTime;
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import com.spring.cucumber.exceptions.ClassNameResolver;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
+import java.time.LocalDateTime;
+
+
+@Getter @Setter
 @AllArgsConstructor
-@JsonPropertyOrder({"timestamp","status","message"})
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT,
-		use = JsonTypeInfo.Id.CUSTOM,
-		property = "error",
-		visible = true)
-@JsonTypeIdResolver(ClassNameResolver.class)
+@NoArgsConstructor
 public class ApiErrorResponse {
-	
-	@Schema(description = "Error Status")
-	private final int status;
+	@Schema(title = "status", name = "status", description = "Error Status", example = "400")
+	private int status;
 
-	@Schema(description = "Error Timestamp")
+	@Schema(title = "timestamp", name = "timestamp", description = "Error Timestamp", example = "2021-08-10 03:48:58")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-	private final LocalDateTime timestamp;
-	
-	@Schema(description = "Error Message")
-	private final List<SubError> message;
-
+	private LocalDateTime timestamp;
 }

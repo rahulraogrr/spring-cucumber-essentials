@@ -1,17 +1,15 @@
 package com.spring.cucumber.exceptions.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.spring.cucumber.exceptions.models.messages.NotFoundMessage;
 import lombok.*;
 
-@Data
+import java.util.List;
+
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class NotFoundError extends SubError {
-    @Schema(title = "path", description = "path", example = "/api/v1/users/")
-    public String path;
-
-    @Schema(title = "defaultMsg", description = "defaultMsg", example = "User was not found for parameters rahulraogrr")
-    public String defaultMsg;
+public class NotFoundError extends ApiErrorResponse {
+    List<NotFoundMessage> messages;
 }
