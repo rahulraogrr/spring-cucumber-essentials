@@ -40,8 +40,7 @@ public class UserServiceImpl implements UserService {
 	public User modifyUser(User user, String username) throws NotFoundException {
 		log.info("Modify User {}",username);
 
-	    User modifyUser = userRepository.findByUsername(username)
-				.orElseThrow(() -> new NotFoundException(User.class,username));
+	    User modifyUser = getUserByUsername(username);
 
 		modifyUser.setUsername(user.getUsername());
 		modifyUser.setPassword(user.getPassword());
@@ -63,10 +62,7 @@ public class UserServiceImpl implements UserService {
 	public boolean deleteUser(String username) throws NotFoundException {
 		log.info("User Deletion Initiated For {}",username);
 
-		User user = userRepository.findByUsername(username)
-						.orElseThrow(() ->  new NotFoundException(User.class,username));
-
-		userRepository.deleteById(user.getId());
+		userRepository.deleteById(getUserByUsername(username).getId());
 
 		log.info("User Deletion Success For {}",username);
 
@@ -76,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserByUsername(String username) throws NotFoundException {
 		return userRepository.findByUsername(username)
-				.orElseThrow(() -> new NotFoundException(User.class,username));
+					.orElseThrow(() -> new NotFoundException(User.class,username));
 	}
 	
 }
