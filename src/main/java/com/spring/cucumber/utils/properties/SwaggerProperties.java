@@ -1,14 +1,15 @@
 package com.spring.cucumber.utils.properties;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Map;
 
-@Getter @Setter
+@Getter
+@AllArgsConstructor
 @ConfigurationProperties(prefix = "openapi")
 public class SwaggerProperties {
-    private Map<String,String> info;
-    private Map<String,String> responseCode;
+    private final Map<String,String> info;
+    private final Map<String,String> responseCode;
 }
