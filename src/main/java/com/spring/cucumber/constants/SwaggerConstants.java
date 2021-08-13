@@ -1,6 +1,6 @@
 package com.spring.cucumber.constants;
 
-public class SwaggerConstants {
+public final class SwaggerConstants {
     public static final String INFO_TITLE = "title";
     public static final String INFO_VERSION = "version";
     public static final String INFO_DESCRIPTION = "description";
