@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -85,13 +86,13 @@ public class GlobalExceptionHandler {
      * @param e {@link MethodArgumentNotValidException}
      * @return error {@link ApiErrorResponse}
      */
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     public ResponseEntity<ApiErrorResponse> handleValidationErrors(MethodArgumentNotValidException e){
         log.error("Validation Error");
 
         List<BadRequestMessage> badRequestMessages = new ArrayList<>();
 
-        if (e.getFieldErrors().size()>0){
+        if (e.getFieldErrors().size() > 0){
             e.getFieldErrors().forEach(fieldError ->
                     badRequestMessages.add(BadRequestMessage.builder()
                             .object(fieldError.getObjectName())
@@ -100,6 +101,8 @@ public class GlobalExceptionHandler {
                             .defaultMessage(fieldError.getDefaultMessage())
                             .build()));
         }
+
+        Collections.sort(badRequestMessages);
 
         BadRequestError error = new BadRequestError();
         error.setTimestamp(LocalDateTime.now());

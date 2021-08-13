@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter @Setter
 @Builder
-public class BadRequestMessage extends Message {
+public class BadRequestMessage extends Message implements Comparable<BadRequestMessage>{
 	@Schema(title = "object", description = "object", example = "User")
 	private String object;
 
@@ -19,4 +19,9 @@ public class BadRequestMessage extends Message {
 
 	@Schema(title = "defaultMessage", description = "defaultMessage", example = "username must be a minimum of 6 and maximum of 12 Characters")
 	private String defaultMessage;
+
+	@Override
+	public int compareTo(BadRequestMessage badRequestMessage) {
+		return this.getField().compareTo(badRequestMessage.getField());
+	}
 }
