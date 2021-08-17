@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
-@Tag(name = "USER", description = "UserController")
+@Tag(name = "USER", description = "User Controller")
 public class UserController {
 	
 	@Autowired

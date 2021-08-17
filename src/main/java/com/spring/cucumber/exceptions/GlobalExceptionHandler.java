@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -102,12 +103,10 @@ public class GlobalExceptionHandler {
                             .build()));
         }
 
-        Collections.sort(badRequestMessages);
-
         BadRequestError error = new BadRequestError();
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessages(badRequestMessages);
+        error.setMessages(badRequestMessages.stream().sorted().collect(Collectors.toList()));
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
