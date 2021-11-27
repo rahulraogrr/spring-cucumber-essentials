@@ -1,10 +1,9 @@
 package com.spring.cucumber.constants;
 
-public final class MessageConstants {
-    public static final String INTERNAL_SERVER_ERROR_MESSAGE = "errMessage";
-    public static final String BAD_GATEWAY_BODY_MISSING = "bodyMissing";
+import lombok.experimental.UtilityClass;
 
-    private MessageConstants() {
-
-    }
+@UtilityClass
+public class MessageConstants {
+    public final String INTERNAL_SERVER_ERROR_MESSAGE = "errMessage";
+    public final String BAD_GATEWAY_BODY_MISSING = "bodyMissing";
 }

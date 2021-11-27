@@ -1,11 +1,13 @@
 package com.spring.cucumber.api;
 
+import com.spring.cucumber.constants.SwaggerConstants;
 import com.spring.cucumber.exceptions.custom.NotFoundException;
 import com.spring.cucumber.exceptions.models.BadRequestError;
 import com.spring.cucumber.exceptions.models.InternalServerError;
 import com.spring.cucumber.exceptions.models.NotFoundError;
 import com.spring.cucumber.models.User;
 import com.spring.cucumber.services.UserService;
+import com.spring.cucumber.utils.properties.SwaggerProperties;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,20 +31,20 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 @Tag(name = "USER", description = "User Controller")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Operation(summary = "Get All Users", description = "Get All Users From Database", tags = {"USER"})
 	@ApiResponses( value = {
-			@ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = BadRequestError.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "404", description = "Resource Not Found", content = @Content(schema = @Schema(implementation = NotFoundError.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = InternalServerError.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+			@ApiResponse(responseCode = SwaggerConstants.OK, description = "Successful Operation", content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+			@ApiResponse(responseCode = SwaggerConstants.BAD_REQUEST, description = "Bad Request", content = @Content(schema = @Schema(implementation = BadRequestError.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+			@ApiResponse(responseCode = SwaggerConstants.NOT_FOUND, description = "Resource Not Found", content = @Content(schema = @Schema(implementation = NotFoundError.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+			@ApiResponse(responseCode = SwaggerConstants.INTERNAL_SERVER_ERROR, description = "Internal Server Error", content = @Content(schema = @Schema(implementation = InternalServerError.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
 	})
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> getAllUsers() throws NotFoundException{
-	  return ResponseEntity.ok(userService.getAllUsers());
+		return ResponseEntity.ok(userService.getAllUsers());
 	}
 
 	@Operation(summary = "Save User", description = "Save A New User To Database", tags = {"USER"})
@@ -54,9 +57,9 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<?> createUser(@Valid @RequestBody User user){
 		return ResponseEntity.created(ServletUriComponentsBuilder
-				.fromCurrentRequest() 
-				.path("/{username}")
-				.buildAndExpand(userService.createUser(user).getUsername()).toUri())
+						.fromCurrentRequest()
+						.path("/{username}")
+						.buildAndExpand(userService.createUser(user).getUsername()).toUri())
 				.build();
 	}
 

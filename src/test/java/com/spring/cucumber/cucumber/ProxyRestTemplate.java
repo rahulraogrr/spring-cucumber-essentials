@@ -1,11 +1,13 @@
 package com.spring.cucumber.cucumber;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.spring.cucumber.SpringCucumberEssentialsApplication;
 
 import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,13 +21,14 @@ import java.util.List;
         classes = SpringCucumberEssentialsApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@Slf4j
 public abstract class ProxyRestTemplate {
 
 	private RestTemplate restTemplate;
 
 	@Autowired
-	public final void setRestTemplate(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
+	public final void setRestTemplate(RestTemplateBuilder restTemplateBuilder) {
+		this.restTemplate = restTemplateBuilder.build();
 	}
 
 	public static final String BASE_URL = "";
@@ -43,7 +46,8 @@ public abstract class ProxyRestTemplate {
 	 * @param params
 	 * @return
 	 */
-	public String getRequest(List<String> params){
+	public String getForObject(List<String> params){
+		log.info("getForObject");
 		return null;
 	}
 

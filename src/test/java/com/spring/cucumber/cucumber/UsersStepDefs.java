@@ -10,12 +10,11 @@ public class UsersStepDefs extends ProxyRestTemplate {
 	@When("getAllUsers api is called with no records in DB")
     public void whenUserClicksOnSubmitButton() {
 		log.info("Inside whenUserClicksOnSubmitButton");
-		getRequest(null);
+		getForObject(null);
     }
 
-	@Then("api should return 404 error")
+	@Then("api should return NOT_FOUND error")
     public void theResponseShouldBeAbleToLoginAndResponseIs() {
 		log.info("Inside theResponseShouldBeAbleToLoginAndResponseIs");
-		throw new RuntimeException("Test Rahul Defs");
     }
 }

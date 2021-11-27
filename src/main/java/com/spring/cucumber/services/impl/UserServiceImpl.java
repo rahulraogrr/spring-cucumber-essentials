@@ -13,6 +13,9 @@ import com.spring.cucumber.services.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 @Slf4j
 @Service("UserServiceImpl")
 public class UserServiceImpl implements UserService {
@@ -74,5 +77,14 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUsername(username)
 					.orElseThrow(() -> new NotFoundException(User.class,username));
 	}
-	
+
+	@PostConstruct
+	public void postConstruct(){
+		System.out.println("Called Post Construct in UserServiceImpl");
+	}
+
+	@PreDestroy
+	public void preDestroy(){
+		System.out.println("Called Pre Destroy in UserServiceImpl");
+	}
 }
